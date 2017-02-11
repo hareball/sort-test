@@ -31,6 +31,8 @@ int main()
 
 	printf("*** Bubble Sort starting... ");
 
+	fflush(stdout);
+
 
 	start = clock();
 	do_bubblesort(bsrandnums);
@@ -51,6 +53,8 @@ int main()
 	}
 	
 	printf("\n\r*** Insertion Sort starting... ");
+
+	fflush(stdout);
 
 	start = clock();
 	do_insertionsort(israndnums);
