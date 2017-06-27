@@ -1,5 +1,5 @@
 # sort-test
-Just a test benchmarking tool.
+Just a sort benchmarking tool.
 Useful to test performance of different sort types against the same dataset.
 
 Compiling: 
