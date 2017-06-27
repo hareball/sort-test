@@ -39,7 +39,7 @@ int main()
 	diff = clock() - start;
 
 	msec = diff * 1000 / CLOCKS_PER_SEC;
-	printf("complete. Time taken:[%d.%d] seconds.\n\r", msec/1000, msec%1000);
+	printf("complete. Time taken:[%d.%03d] seconds.\n\r", msec/1000, msec%1000);
 	do_displaysortedlist(bsrandnums);
 	
 
@@ -51,7 +51,7 @@ int main()
 	diff = clock() - start;
 	
 	msec = diff * 1000 / CLOCKS_PER_SEC;
-	printf("complete. Time taken:[%d.%d] seconds.\n\r", msec/1000, msec%1000);
+	printf("complete. Time taken:[%d.%03d] seconds.\n\r", msec/1000, msec%1000);
 	do_displaysortedlist(israndnums);
 
 
@@ -63,8 +63,8 @@ int main()
 	do_quicksort(qsrandnums, ARRAYSIZE);
 	diff = clock() - start;
 	
-	msec = diff * 1000 / CLOCKS_PER_SEC;
-	printf("complete. Time taken:[%d.%d] seconds.\n\r", msec/1000, msec%1000);
+	msec = (diff * 1000.0) / CLOCKS_PER_SEC;
+	printf("complete. Time taken:[%d.%03d] seconds.\n\r", msec/1000, msec%1000);
 	do_displaysortedlist(qsrandnums);
 
 	return (0);
