@@ -40,7 +40,7 @@ int main()
 	do_bubblesort( bsrandnums );
 	diff = clock() - start;
 
-	msec = diff * 1000 / CLOCKS_PER_SEC;
+	msec = ( diff * 1000 ) / CLOCKS_PER_SEC;
 	printf( "complete. Time taken:[%d.%03d] seconds.\n", msec/1000, msec%1000 );
 	do_displaysortedlist( bsrandnums );
 
@@ -51,7 +51,7 @@ int main()
 	do_insertionsort( israndnums );
 	diff = clock() - start;
 
-	msec = diff * 1000 / CLOCKS_PER_SEC;
+	msec = ( diff * 1000 ) / CLOCKS_PER_SEC;
 	printf( "complete. Time taken:[%d.%03d] seconds.\n", msec/1000, msec%1000 );
 	do_displaysortedlist( israndnums );
 
@@ -147,7 +147,7 @@ void do_insertionsort( int *sortlist )
 
 void do_quicksort( int *sortlist )
 {
-	int  piv, beg[ QS_MAX_LEVELS ], end[ QS_MAX_LEVELS ], i = 0, L, R;
+	int  piv, beg[ QS_MAX_LEVELS ], end[ QS_MAX_LEVELS ], i = 0;
 
 	long int iter = 0;
 
@@ -156,6 +156,8 @@ void do_quicksort( int *sortlist )
 
 	while( i >= 0 )
 	{
+        	int L, R;
+
 		L = beg[ i ];
 		R = end[ i ] - 1;
 		if( L < R )
@@ -168,7 +170,7 @@ void do_quicksort( int *sortlist )
 
 		  	while( L < R )
 			{
-				while( sortlist[ R ] >= piv && L < R )
+				while( ( ( L < R ) && sortlist[ R ] >= piv ) )
 				{
 					R--;
 					iter++;
@@ -179,7 +181,7 @@ void do_quicksort( int *sortlist )
 					sortlist[ L++ ] = sortlist[ R ];
 				}
 
-				while( sortlist[ L ] <= piv && L < R )
+				while( ( ( L < R ) && sortlist[ L ] <= piv ) )
 				{
 					L++;
 					iter++;
