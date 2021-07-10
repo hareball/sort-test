@@ -2,15 +2,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define ARRAYSIZE 		50000
-#define QS_MAX_LEVELS  		1000
-
+#include "sort-test.h"
 
 /* Predeclare functions */
 void do_displaysortedlist( int *sortedlist );
-void do_bubblesort( int *sortlist );
-void do_insertionsort( int *sortlist );
-void do_quicksort( int *sortlist );
 
 int main()
 {
@@ -79,133 +74,6 @@ void do_displaysortedlist( int *sortedlist )
 		if( x == 5 )
 			printf( "....\n" );
 	}
-
-	return;
-}
-
-void do_bubblesort( int *sortlist )
-{
-	int x = 0, tmpSwap = 0;
-	long int iter = 0;
-
-	do
-	{
-		tmpSwap = 0;
-
-		for( x = 0; x < ( ARRAYSIZE - 1 ); x++ )
-		{
-			if( sortlist[ x ] > sortlist[ x + 1 ] )
-			{
-				//swap
-				tmpSwap = sortlist[ x + 1 ];
-				sortlist[ x + 1 ] = sortlist[ x ];
-				sortlist[ x ] = tmpSwap;
-			}
-			iter++;
-		}
-
-	} while( tmpSwap );
-
-	printf( "[%ld iterations]... ", iter );
-
-	return;
-}
-
-void do_insertionsort( int *sortlist )
-{
-	int x = 0, tmpSwap = 0;
-	long int iter = 0;
-
-	for( x = 1; x < ( ARRAYSIZE ); x++ )
-	{
-		int cpos = x;
-
-		// take it to the top
-		do
-		{
-			if( sortlist[ cpos ] < sortlist[ cpos - 1 ] )
-			{
-				//swap them
-				tmpSwap = sortlist[ cpos - 1 ];
-				sortlist[ cpos - 1 ] = sortlist[ cpos ];
-				sortlist[ cpos ] = tmpSwap;
-			}
-
-			cpos--;
-
-			iter++;
-
-		} while( sortlist[ cpos ] < sortlist[ cpos - 1 ] &&
-			 cpos > 0 );
-	}
-
-	printf( "[%ld iterations]... ", iter );
-
-	return;
-}
-
-
-void do_quicksort( int *sortlist )
-{
-	int  piv, beg[ QS_MAX_LEVELS ], end[ QS_MAX_LEVELS ], i = 0;
-
-	long int iter = 0;
-
-	beg[ 0 ] = 0;
-	end[ 0 ] = ARRAYSIZE;
-
-	while( i >= 0 )
-	{
-        	int L, R;
-
-		L = beg[ i ];
-		R = end[ i ] - 1;
-		if( L < R )
-		{
-			piv = sortlist[ L ];
-			if( i == QS_MAX_LEVELS - 1 )
-			{
-				return;
-			}
-
-		  	while( L < R )
-			{
-				while( ( ( L < R ) && sortlist[ R ] >= piv ) )
-				{
-					R--;
-					iter++;
-				}
-
-				if( L < R )
-				{
-					sortlist[ L++ ] = sortlist[ R ];
-				}
-
-				while( ( ( L < R ) && sortlist[ L ] <= piv ) )
-				{
-					L++;
-					iter++;
-				}
-
-				if( L < R )
-				{
-					sortlist[ R-- ] = sortlist[ L ];
-				}
-			}
-
-		  	sortlist[ L ] = piv;
-			beg[ i + 1 ] = L + 1;
-			end[ i + 1 ] = end[ i ];
-			end[ i++ ] = L;
-		}
-		else
-		{
-			i--;
-			iter++;
-		}
-	}
-
-	printf( "[%ld iterations]... ", iter );
 
 	return;
 }

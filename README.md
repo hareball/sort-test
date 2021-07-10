@@ -5,4 +5,4 @@ Useful to test performance of different sort algorithms against the same dataset
 Compiling: 
 extract to a directory, type make
 
-run rtest in shell, i.e. ./rtest
+run sort-test in shell, i.e. ./sort-test
