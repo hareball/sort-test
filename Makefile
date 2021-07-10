@@ -1,7 +1,7 @@
 
-rtest:	rtest.c   
-	gcc -Wall -Werror -Ofast -s rtest.c -o rtest
+rtest:	sort-test.c
+	gcc -Wall -Werror -Ofast -s sort-test.c -o sort-test
 
 clean:
-	rm -f rtest
-	rm -f rtest.o
+	rm -f sort-test
+	rm -f sort-test.o

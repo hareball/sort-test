@@ -7,7 +7,7 @@
 
 
 /* Predeclare functions */
-void do_displaysortedlist(int *sortedlist);
+void do_displaysortedlist( int *sortedlist );
 void do_bubblesort( int *sortlist );
 void do_insertionsort( int *sortlist );
 void do_quicksort( int *sortlist );
