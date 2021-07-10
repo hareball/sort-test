@@ -8,5 +8,6 @@
 void do_bubblesort( int *sortlist );
 void do_insertionsort( int *sortlist );
 void do_quicksort( int *sortlist );
+void do_gnomesort( int *sortlist );
 
 #endif

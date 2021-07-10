@@ -1,7 +1,11 @@
+CC=gcc
+CLEAN=rm
+CFLAGS=-Wall -Werror -Ofast -s
+LDFLAGS=
+OBJECTS=sort-test.o bubblesort.o insertionsort.o quicksort.o gnomesort.o
 
-rtest:	sort-test.c
-	gcc -Wall -Werror -Ofast -s bubblesort.c insertionsort.c quicksort.c sort-test.c -o sort-test
+sort-test: $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o sort-test $(LDFLAGS)
 
 clean:
-	rm -f sort-test
-	rm -f *.o
+	$(CLEAN) -f $(OBJECTS)

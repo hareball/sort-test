@@ -12,7 +12,8 @@ int main()
 	int msec;
 	time_t t;
 	int randnums[ ARRAYSIZE ], bsrandnums[ ARRAYSIZE ],
-	    israndnums[ ARRAYSIZE ], qsrandnums[ ARRAYSIZE ];
+	    israndnums[ ARRAYSIZE ], qsrandnums[ ARRAYSIZE ],
+	    gsrandnums[ ARRAYSIZE ];
 	clock_t start, diff;
 
 	// Init random number generator
@@ -24,6 +25,7 @@ int main()
 		bsrandnums[x] = randnums[x];
 		israndnums[x] = randnums[x];
 		qsrandnums[x] = randnums[x];
+		gsrandnums[x] = randnums[x];
 	}
 
 	printf( "*** %d Random numbers generated.\n", ARRAYSIZE );
@@ -60,6 +62,17 @@ int main()
 	msec = ( diff * 1000.0 ) / CLOCKS_PER_SEC;
 	printf( "complete. Time taken:[%d.%03d] seconds.\n", msec/1000, msec%1000 );
 	do_displaysortedlist( qsrandnums );
+
+        printf( "\n*** Gnome Sort starting... " );
+        fflush( stdout );
+
+        start = clock();
+        do_gnomesort( gsrandnums );
+        diff = clock() - start;
+
+        msec = ( diff * 1000.0 ) / CLOCKS_PER_SEC;
+        printf( "complete. Time taken:[%d.%03d] seconds.\n", msec/1000, msec%1000 );
+        do_displaysortedlist( gsrandnums );
 
 	return( 0 );
 }
