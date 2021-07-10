@@ -3,11 +3,11 @@
 
 #include "sort-test.h"
 
-void do_quicksort( int *sortlist )
+u_int64_t do_quicksort( int *sortlist )
 {
         int  piv, beg[ QS_MAX_LEVELS ], end[ QS_MAX_LEVELS ], i = 0;
 
-        long int iter = 0;
+        u_int64_t iter = 0;
 
         beg[ 0 ] = 0;
         end[ 0 ] = ARRAYSIZE;
@@ -23,7 +23,7 @@ void do_quicksort( int *sortlist )
                         piv = sortlist[ L ];
                         if( i == QS_MAX_LEVELS - 1 )
                         {
-                                return;
+                                return( iter );
                         }
 
                         while( L < R )
@@ -63,8 +63,5 @@ void do_quicksort( int *sortlist )
                 }
         }
 
-        printf( "[%ld iterations]... ", iter );
-
-        return;
+        return( iter );
 }
-

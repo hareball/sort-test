@@ -3,10 +3,10 @@
 
 #include "sort-test.h"
 
-void do_insertionsort( int *sortlist )
+u_int64_t do_insertionsort( int *sortlist )
 {
         int x = 0, tmpSwap = 0;
-        long int iter = 0;
+        u_int64_t iter = 0;
 
         for( x = 1; x < ( ARRAYSIZE ); x++ )
         {
@@ -31,8 +31,6 @@ void do_insertionsort( int *sortlist )
                          cpos > 0 );
         }
 
-        printf( "[%ld iterations]... ", iter );
-
-        return;
+        return( iter );
 }
 

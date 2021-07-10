@@ -3,10 +3,10 @@
 
 #include "sort-test.h"
 
-void do_gnomesort( int *sortlist )
+u_int64_t do_gnomesort( int *sortlist )
 {
         int pos = 0, tmpSwap = 0;
-        long int iter = 0;
+        u_int64_t iter = 0;
 
 	do
 	{
@@ -28,7 +28,5 @@ void do_gnomesort( int *sortlist )
 
 	} while( pos < ARRAYSIZE );
 
-        printf( "[%ld iterations]... ", iter );
-
-        return;
+        return( iter );
 }

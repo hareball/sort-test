@@ -3,10 +3,10 @@
 
 #include "sort-test.h"
 
-void do_bubblesort( int *sortlist )
+u_int64_t do_bubblesort( int *sortlist )
 {
         int x = 0, tmpSwap = 0;
-        long int iter = 0;
+        u_int64_t iter = 0;
 
         do
         {
@@ -26,8 +26,6 @@ void do_bubblesort( int *sortlist )
 
         } while( tmpSwap );
 
-        printf( "[%ld iterations]... ", iter );
-
-        return;
+        return( iter );
 }
 

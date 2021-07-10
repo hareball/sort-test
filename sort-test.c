@@ -15,6 +15,7 @@ int main()
 	    israndnums[ ARRAYSIZE ], qsrandnums[ ARRAYSIZE ],
 	    gsrandnums[ ARRAYSIZE ];
 	clock_t start, diff;
+	u_int64_t iter;
 
 	// Init random number generator
 	srand( (unsigned) time( &t ) );
@@ -30,48 +31,49 @@ int main()
 
 	printf( "*** %d Random numbers generated.\n", ARRAYSIZE );
 
-	printf( "*** Bubble Sort starting... " );
+	printf( "*** Bubble Sort starting...\t\t" );
 	fflush( stdout );
 
 	start = clock();
-	do_bubblesort( bsrandnums );
+	iter = do_bubblesort( bsrandnums );
 	diff = clock() - start;
 
 	msec = ( diff * 1000 ) / CLOCKS_PER_SEC;
-	printf( "complete. Time taken:[%d.%03d] seconds.\n", msec/1000, msec%1000 );
+	printf( "[%20ld iterations]... complete. Time taken:[%8d.%03d] seconds.\n", iter, msec/1000, msec%1000 );
 	do_displaysortedlist( bsrandnums );
 
-	printf( "\n*** Insertion Sort starting... " );
+
+	printf( "*** Insertion Sort starting...\t\t" );
 	fflush( stdout );
 
 	start = clock();
-	do_insertionsort( israndnums );
+	iter = do_insertionsort( israndnums );
 	diff = clock() - start;
 
 	msec = ( diff * 1000 ) / CLOCKS_PER_SEC;
-	printf( "complete. Time taken:[%d.%03d] seconds.\n", msec/1000, msec%1000 );
+	printf( "[%20ld iterations]... complete. Time taken:[%8d.%03d] seconds.\n", iter, msec/1000, msec%1000 );
 	do_displaysortedlist( israndnums );
 
-	printf( "\n*** Quick Sort starting... " );
+	printf( "*** Quick Sort starting...\t\t" );
 	fflush( stdout );
 
 	start = clock();
-	do_quicksort( qsrandnums );
+	iter = do_quicksort( qsrandnums );
 	diff = clock() - start;
 
 	msec = ( diff * 1000.0 ) / CLOCKS_PER_SEC;
-	printf( "complete. Time taken:[%d.%03d] seconds.\n", msec/1000, msec%1000 );
+	printf( "[%20ld iterations]... complete. Time taken:[%8d.%03d] seconds.\n", iter, msec/1000, msec%1000 );
 	do_displaysortedlist( qsrandnums );
 
-        printf( "\n*** Gnome Sort starting... " );
+        printf( "*** Gnome Sort starting...\t\t" );
         fflush( stdout );
 
         start = clock();
-        do_gnomesort( gsrandnums );
+	iter = do_gnomesort( gsrandnums );
         diff = clock() - start;
 
         msec = ( diff * 1000.0 ) / CLOCKS_PER_SEC;
-        printf( "complete. Time taken:[%d.%03d] seconds.\n", msec/1000, msec%1000 );
+	printf( "[%20ld iterations]... complete. Time taken:[%8d.%03d] seconds.\n", iter, msec/1000, msec%1000 );
         do_displaysortedlist( gsrandnums );
 
 	return( 0 );
@@ -79,13 +81,16 @@ int main()
 
 void do_displaysortedlist( int *sortedlist )
 {
-	for( int x = 0; x < ARRAYSIZE; x++ )
+	if( SHOW_SORTED_LIST )
 	{
-		if( x < 4 || x > ( ARRAYSIZE - 5 ) )
-			printf( "[%d] - %d\n", x, sortedlist[ x ] );
+		for( int x = 0; x < ARRAYSIZE; x++ )
+		{
+			if( x < 4 || x > ( ARRAYSIZE - 5 ) )
+				printf( "[%d] - %d\n", x, sortedlist[ x ] );
 
-		if( x == 5 )
-			printf( "....\n" );
+			if( x == 5 )
+				printf( "....\n" );
+		}
 	}
 
 	return;
