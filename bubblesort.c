@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "sort-test.h"
 
 u_int64_t do_bubblesort( int *sortlist )

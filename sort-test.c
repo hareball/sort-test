@@ -1,85 +1,36 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
 #include "sort-test.h"
 
 /* Predeclare functions */
-void do_displaysortedlist( int *sortedlist );
+void displaySortedList( int *sortedlist );
+void dupRandomArray( int *static_list, int *working_list );
+void runSort( char *sortname, sortType sortFunc, int *staticRandoms );
 
 int main()
 {
-	int msec;
 	time_t t;
-	int randnums[ ARRAYSIZE ], bsrandnums[ ARRAYSIZE ],
-	    israndnums[ ARRAYSIZE ], qsrandnums[ ARRAYSIZE ],
-	    gsrandnums[ ARRAYSIZE ];
-	clock_t start, diff;
-	u_int64_t iter;
+	int staticRandoms[ ARRAYSIZE ];
 
 	// Init random number generator
 	srand( (unsigned) time( &t ) );
 
+	// Populate array of random numbers
 	for ( int x = 0; x < ARRAYSIZE; x++ )
 	{
-		randnums[x] = rand();
-		bsrandnums[x] = randnums[x];
-		israndnums[x] = randnums[x];
-		qsrandnums[x] = randnums[x];
-		gsrandnums[x] = randnums[x];
+		staticRandoms[ x ] = rand();
 	}
 
 	printf( "*** %d Random numbers generated.\n", ARRAYSIZE );
 
-	printf( "*** Bubble Sort starting...\t\t" );
-	fflush( stdout );
-
-	start = clock();
-	iter = do_bubblesort( bsrandnums );
-	diff = clock() - start;
-
-	msec = ( diff * 1000 ) / CLOCKS_PER_SEC;
-	printf( "[%20ld iterations]... complete. Time taken:[%8d.%03d] seconds.\n", iter, msec/1000, msec%1000 );
-	do_displaysortedlist( bsrandnums );
-
-
-	printf( "*** Insertion Sort starting...\t\t" );
-	fflush( stdout );
-
-	start = clock();
-	iter = do_insertionsort( israndnums );
-	diff = clock() - start;
-
-	msec = ( diff * 1000 ) / CLOCKS_PER_SEC;
-	printf( "[%20ld iterations]... complete. Time taken:[%8d.%03d] seconds.\n", iter, msec/1000, msec%1000 );
-	do_displaysortedlist( israndnums );
-
-	printf( "*** Quick Sort starting...\t\t" );
-	fflush( stdout );
-
-	start = clock();
-	iter = do_quicksort( qsrandnums );
-	diff = clock() - start;
-
-	msec = ( diff * 1000.0 ) / CLOCKS_PER_SEC;
-	printf( "[%20ld iterations]... complete. Time taken:[%8d.%03d] seconds.\n", iter, msec/1000, msec%1000 );
-	do_displaysortedlist( qsrandnums );
-
-        printf( "*** Gnome Sort starting...\t\t" );
-        fflush( stdout );
-
-        start = clock();
-	iter = do_gnomesort( gsrandnums );
-        diff = clock() - start;
-
-        msec = ( diff * 1000.0 ) / CLOCKS_PER_SEC;
-	printf( "[%20ld iterations]... complete. Time taken:[%8d.%03d] seconds.\n", iter, msec/1000, msec%1000 );
-        do_displaysortedlist( gsrandnums );
+	runSort( "Bubble Sort", &do_bubblesort, staticRandoms );
+	runSort( "Insertion Sort", &do_insertionsort, staticRandoms );
+	runSort( "Quick Sort", &do_quicksort, staticRandoms );
+	runSort( "Gnome Sort", &do_gnomesort, staticRandoms );
+	runSort( "Comb Sort", &do_combsort, staticRandoms );
 
 	return( 0 );
 }
 
-void do_displaysortedlist( int *sortedlist )
+void displaySortedList( int *sortedlist )
 {
 	if( SHOW_SORTED_LIST )
 	{
@@ -91,7 +42,34 @@ void do_displaysortedlist( int *sortedlist )
 			if( x == 5 )
 				printf( "....\n" );
 		}
+		printf( "\n" );
 	}
 
 	return;
+}
+
+void dupRandomArray( int *static_list, int *working_list )
+{
+        for ( int x = 0; x < ARRAYSIZE; x++ )
+        {
+                working_list[ x ] = static_list[ x ];
+	}
+}
+
+void runSort( char *sortname, sortType sortFunc, int *staticRandoms )
+{
+	int workingRandoms[ ARRAYSIZE ];
+        int msec;
+        clock_t start, diff;
+        u_int64_t iter;
+
+        printf( "*** %s starting...\t\t", sortname );
+        fflush( stdout );
+        dupRandomArray( staticRandoms, workingRandoms );
+        start = clock();
+	iter = sortFunc( workingRandoms );
+        diff = clock() - start;
+        msec = ( diff * 1000 ) / CLOCKS_PER_SEC;
+        printf( "[%20ld iterations]... complete. Time taken:[%8d.%03d] seconds.\n", iter, msec/1000, msec%1000 );
+        displaySortedList( workingRandoms );
 }
