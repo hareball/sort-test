@@ -1,9 +1,9 @@
 #include "sort-test.h"
 
-u_int64_t do_gnomesort( int *sortlist )
+u_int64_t do_gnomesort( int *sortlist, int asize )
 {
-        int pos = 0, tmpSwap = 0;
-        u_int64_t iter = 0;
+	int pos = 0, tmpSwap = 0;
+	u_int64_t iter = 0;
 
 	do
 	{
@@ -23,7 +23,7 @@ u_int64_t do_gnomesort( int *sortlist )
 		iter++;
 
 
-	} while( pos < ARRAYSIZE );
+	} while( pos < asize );
 
-        return( iter );
+	return( iter );
 }
