@@ -1,5 +1,7 @@
 #include "sort-test.h"
 
+const int QS_MAX_LEVELS	= 1000;
+
 u_int64_t do_quicksort( int *sortlist, int asize )
 {
 	int  piv, beg[ QS_MAX_LEVELS ], end[ QS_MAX_LEVELS ], i = 0;

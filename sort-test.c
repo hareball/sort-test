@@ -6,54 +6,48 @@ void dupRandomArray( int *static_list, int *working_list, int asize );
 void runSort( char *sortname, sortType sortFunc, int *staticRandoms, int asize );
 
 /* Constants */
-const int largeArraySize = 50000;
-const int mediumArraySize = 5000;
-const int smallArraySize = 20;
+const int largeSize = 50000;
+
+/* Largest sort to be defined last */
+const SORT sortRunPlan[] =   {
+								{20, 0},			// Small sort
+								{5000, 0},			// Medium sort
+								{50000, 0}			// Large sort
+							 };
+
+const int totalSortRuns = sizeof(sortRunPlan) / (sizeof(int)*2);	
 
 int main()
 {
 	time_t t;
-	int staticRandoms[ largeArraySize ];
-
+	int staticRandoms[ sortRunPlan[ totalSortRuns - 1 ].size ];
+	int sortRunNum;
+	
 	// Init random number generator
 	srand( (unsigned) time( &t ) );
 	
-	// Populate small array of random numbers
-	for ( int x = 0; x < smallArraySize; x++ )
+	sortRunNum = 0;
+	
+	while( sortRunNum < totalSortRuns )
 	{
-		staticRandoms[ x ] = rand();
-	}
-	printf( "\n--- %d Random numbers generated ---\n", smallArraySize );
-	runSort( "Bubble Sort", &do_bubblesort, staticRandoms, smallArraySize );
-	runSort( "Insertion Sort", &do_insertionsort, staticRandoms, smallArraySize );
-	runSort( "Quick Sort", &do_quicksort, staticRandoms, smallArraySize );
-	runSort( "Gnome Sort", &do_gnomesort, staticRandoms, smallArraySize );
-	runSort( "Comb Sort", &do_combsort, staticRandoms, smallArraySize );
+		// Populate array of random numbers
+		for ( int x = 0; x < sortRunPlan[ sortRunNum ].size; x++ )
+		{
+			staticRandoms[ x ] = rand();
+		}
+		
+		printf( "\n--- %d Random numbers generated ---\n", sortRunPlan[ sortRunNum ].size );
 
-	// Populate medium array of random numbers
-	for ( int x = 0; x < mediumArraySize; x++ )
-	{
-		staticRandoms[ x ] = rand();
+		runSort( "Bubble Sort", &do_bubblesort, staticRandoms, sortRunPlan[ sortRunNum ].size );	
+		runSort( "Insertion Sort", &do_insertionsort, staticRandoms, sortRunPlan[ sortRunNum ].size );
+		runSort( "Gnome Sort", &do_gnomesort, staticRandoms, sortRunPlan[ sortRunNum ].size );
+		runSort( "Quick Sort", &do_quicksort, staticRandoms, sortRunPlan[ sortRunNum ].size );
+		runSort( "Comb Sort", &do_combsort, staticRandoms, sortRunPlan[ sortRunNum ].size );
+		runSort( "Tim Sort", &do_timsort, staticRandoms, sortRunPlan[ sortRunNum ].size );
+		
+		sortRunNum++;
 	}
-	printf( "\n--- %d Random numbers generated ---\n", mediumArraySize );
-	runSort( "Bubble Sort", &do_bubblesort, staticRandoms, mediumArraySize );
-	runSort( "Insertion Sort", &do_insertionsort, staticRandoms, mediumArraySize );
-	runSort( "Quick Sort", &do_quicksort, staticRandoms, mediumArraySize );
-	runSort( "Gnome Sort", &do_gnomesort, staticRandoms, mediumArraySize );
-	runSort( "Comb Sort", &do_combsort, staticRandoms, mediumArraySize );
-	
-	// Populate large array of random numbers
-	for ( int x = 0; x < largeArraySize; x++ )
-	{
-		staticRandoms[ x ] = rand();
-	}
-	printf( "\n--- %d Random numbers generated ---\n", largeArraySize );
-	runSort( "Bubble Sort", &do_bubblesort, staticRandoms, largeArraySize );
-	runSort( "Insertion Sort", &do_insertionsort, staticRandoms, largeArraySize );
-	runSort( "Quick Sort", &do_quicksort, staticRandoms, largeArraySize );
-	runSort( "Gnome Sort", &do_gnomesort, staticRandoms, largeArraySize );
-	runSort( "Comb Sort", &do_combsort, staticRandoms, largeArraySize );
-	
+		
 	printf("\nSorting Complete.\n\n");
 	
 	return( 0 );
