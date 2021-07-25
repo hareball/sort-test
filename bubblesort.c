@@ -2,12 +2,12 @@
 
 u_int64_t do_bubblesort( int *sortlist, int asize )
 {
-	int x = 0, tmpSwap = 0;
+	int x = 0, tmpSwap = 0, haveSwapped = 0;
 	u_int64_t iter = 0;
 
 	do
 	{
-		tmpSwap = 0;
+		haveSwapped = 0;
 
 		for( x = 0; x < ( asize - 1 ); x++ )
 		{
@@ -17,11 +17,12 @@ u_int64_t do_bubblesort( int *sortlist, int asize )
 				tmpSwap = sortlist[ x + 1 ];
 				sortlist[ x + 1 ] = sortlist[ x ];
 				sortlist[ x ] = tmpSwap;
+				haveSwapped = 1;
 			}
 			iter++;
 		}
 		
-	} while( tmpSwap );
+	} while( haveSwapped );
 
 	return( iter );
 }
