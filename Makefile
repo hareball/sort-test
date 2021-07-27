@@ -2,7 +2,7 @@ CC=gcc
 CLEAN=rm
 CFLAGS=-Wall -Werror -Ofast -s
 LDFLAGS=-lm
-OBJECTS=sort-test.o math.o bubblesort.o insertionsort.o quicksort.o gnomesort.o combsort.o timsort.o
+OBJECTS=sort-test.o math.o bubblesort.o insertionsort.o quicksort.o gnomesort.o combsort.o timsort.o radixsort.o
 
 sort-test: $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o sort-test $(LDFLAGS)

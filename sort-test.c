@@ -26,13 +26,11 @@ int main()
 {
     time_t t;
     int staticRandoms[ getLargestSortSize() ];
-    uint sortRunNum;
+    uint sortRunNum = 0;
     
     // Init random number generator
     srand( (unsigned) time( &t ) );
-    
-    sortRunNum = 0;
-    
+       
     while( sortRunNum < totalSortRuns )
     {
         // Generate static randoms to be sorted
@@ -40,12 +38,13 @@ int main()
             
         printf( "\n--- %d Random numbers generated [%s] ---\n", sortRunPlan[ sortRunNum ].size, sortRunPlan[ sortRunNum ].sortName );
 
-        runSort( "Bubble Sort", &do_bubblesort, staticRandoms, sortRunPlan[ sortRunNum ].size );    
-        runSort( "Insertion Sort", &do_insertionsort, staticRandoms, sortRunPlan[ sortRunNum ].size );
-        runSort( "Gnome Sort", &do_gnomesort, staticRandoms, sortRunPlan[ sortRunNum ].size );
-        runSort( "Quick Sort", &do_quicksort, staticRandoms, sortRunPlan[ sortRunNum ].size );
-        runSort( "Comb Sort", &do_combsort, staticRandoms, sortRunPlan[ sortRunNum ].size );
-        runSort( "Tim Sort", &do_timsort, staticRandoms, sortRunPlan[ sortRunNum ].size );
+        runSort( "Bubble Sort",     &do_bubblesort,     staticRandoms, sortRunPlan[ sortRunNum ].size );    
+        runSort( "Insertion Sort",  &do_insertionsort,  staticRandoms, sortRunPlan[ sortRunNum ].size );
+        runSort( "Gnome Sort",      &do_gnomesort,      staticRandoms, sortRunPlan[ sortRunNum ].size );
+        runSort( "Quick Sort",      &do_quicksort,      staticRandoms, sortRunPlan[ sortRunNum ].size );
+        runSort( "Comb Sort",       &do_combsort,       staticRandoms, sortRunPlan[ sortRunNum ].size );
+        runSort( "Tim Sort",        &do_timsort,        staticRandoms, sortRunPlan[ sortRunNum ].size );
+        runSort( "Radix Sort",      &do_radixsort,      staticRandoms, sortRunPlan[ sortRunNum ].size );
         
         sortRunNum++;
     }

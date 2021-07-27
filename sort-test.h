@@ -49,6 +49,7 @@ u_int64_t do_quicksort      ( int *sortlist, int asize );
 u_int64_t do_gnomesort      ( int *sortlist, int asize );
 u_int64_t do_combsort       ( int *sortlist, int asize );
 u_int64_t do_timsort        ( int *sortlist, int asize );
+u_int64_t do_radixsort      ( int *sortlist, int asize );
 
 // math.c functions
 int randNumGen              ( int min, int max );

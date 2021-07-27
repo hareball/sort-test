@@ -80,9 +80,9 @@ u_int64_t do_timsort( int *sortlist, int asize )
             int right = MIN( ( left + 2 * size - 1 ), ( n - 1 ) );
 
             if( mid < right )
-				merge( sortlist, left, mid, right, &iter );
-			else
-				iter++;
+                merge( sortlist, left, mid, right, &iter );
+            else
+                iter++;
         }
     }
 
