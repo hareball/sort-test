@@ -7,9 +7,9 @@ int randNumGen( int min, int max )
 
 int randNumGen_skewed( int min, int max, float skew )
 {
-        float randomf = (float) rand() / (float) RAND_MAX;
+    float randomf = (float) rand() / (float) RAND_MAX;
 
-        int result = (int) floorf( ( min + ( max + 1 - min ) ) * ( powf( randomf, skew ) ) );
-                
-        return( result );
+    int result = (int) floorf( ( min + ( max + 1 - min ) ) * ( powf( randomf, skew ) ) );
+            
+    return( result );
 }

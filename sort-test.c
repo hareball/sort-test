@@ -1,35 +1,24 @@
 #include "sort-test.h"
 
 /* Predeclare functions */
-void displaySortedList( int *sortedlist, int asize );
-void dupRandomArray( int *static_list, int *working_list, int asize );
-void runSort( char *sortname, sortFun sortModule, int *staticRandoms, int asize );
+void displaySortedList( int *sortedlist, uint32_t asize );
+void dupRandomArray( int *static_list, int *working_list, uint32_t asize );
+void runSort( int algorithmNum, int *staticRandoms, uint32_t asize );
 void generateStaticRandoms( int srn, int *srnd );
-int getLargestSortSize();
-
-/* List of sort types to run */
-const SORT sortRunPlan[] =   {
-                                { "Small Balanced sort",            20,     0, 20,      0, ST_BALANCED      },
-                                { "Medium Balanced sort",           5000,   0, 5000,    0, ST_BALANCED      },
-                                { "Large Balanced sort",            50000,  0, 50000,   0, ST_BALANCED      },
-                                { "Small Top Weighted sort",        20,     0, 20,      0, ST_TOP_WEIGHT    },
-                                { "Medium Top Weighted sort",       5000,   0, 5000,    0, ST_TOP_WEIGHT    },
-                                { "Large Top Weighted sort",        50000,  0, 50000,   0, ST_TOP_WEIGHT    },
-                                { "Small Bottom Weighted sort",     20,     0, 20,      0, ST_BOT_WEIGHT    },
-                                { "Medium Bottom Weighted sort",    5000,   0, 5000,    0, ST_BOT_WEIGHT    },
-                                { "Large Bottom Weighted sort",     50000,  0, 50000,   0, ST_BOT_WEIGHT    }
-                             };
-
-const uint totalSortRuns = sizeof( sortRunPlan ) / sizeof( struct sort_ref );
+uint32_t getLargestSortSize();
 
 int main()
 {
     time_t t;
-    int staticRandoms[ getLargestSortSize() ];
+    int *staticRandoms;
     uint sortRunNum = 0;
+    uint sortNumber;
     
     // Init random number generator
     srand( (unsigned) time( &t ) );
+    
+    // Allocate heap for static randoms
+    staticRandoms = malloc( sizeof(int) * getLargestSortSize() );
        
     while( sortRunNum < totalSortRuns )
     {
@@ -38,25 +27,32 @@ int main()
             
         printf( "\n--- %d Random numbers generated [%s] ---\n", sortRunPlan[ sortRunNum ].size, sortRunPlan[ sortRunNum ].sortName );
 
-        runSort( "Bubble Sort",     &do_bubblesort,     staticRandoms, sortRunPlan[ sortRunNum ].size );    
-        runSort( "Insertion Sort",  &do_insertionsort,  staticRandoms, sortRunPlan[ sortRunNum ].size );
-        runSort( "Gnome Sort",      &do_gnomesort,      staticRandoms, sortRunPlan[ sortRunNum ].size );
-        runSort( "Quick Sort",      &do_quicksort,      staticRandoms, sortRunPlan[ sortRunNum ].size );
-        runSort( "Comb Sort",       &do_combsort,       staticRandoms, sortRunPlan[ sortRunNum ].size );
-        runSort( "Tim Sort",        &do_timsort,        staticRandoms, sortRunPlan[ sortRunNum ].size );
-        runSort( "Radix Sort",      &do_radixsort,      staticRandoms, sortRunPlan[ sortRunNum ].size );
-        
+        for( sortNumber = 0; sortNumber < totalSortAlgorithms; sortNumber++ )
+        {
+            if( sortRunPlan[ sortRunNum ].isLarge && sortAlgorithms[ sortNumber ].runLarge )
+                runSort( sortNumber, staticRandoms, sortRunPlan[ sortRunNum ].size );
+            else
+            {
+                if( !sortRunPlan[ sortRunNum ].isLarge )
+                {
+                    runSort( sortNumber, staticRandoms, sortRunPlan[ sortRunNum ].size );
+                }
+            } 
+        }   
+
         sortRunNum++;
     }
+    
+    free( staticRandoms );
         
     printf("\nSorting Complete.\n\n");
     
     return( 0 );
 }
 
-int getLargestSortSize()
+uint32_t getLargestSortSize()
 {
-    int largestSize, x;
+    uint32_t largestSize, x;
     
     for( largestSize = 0, x = 0; x < totalSortRuns; x++ )
     {
@@ -73,7 +69,7 @@ void generateStaticRandoms( int srn, int *srnd )
     {
         case ST_BALANCED:
             // Populate balanced array of random numbers
-            for ( int x = 0; x < sortRunPlan[ srn ].size; x++ )
+            for ( uint32_t x = 0; x < sortRunPlan[ srn ].size; x++ )
             {
                 srnd[ x ] = randNumGen( sortRunPlan[ srn ].lowerlimit, sortRunPlan[ srn ].upperlimit);
             }
@@ -81,7 +77,7 @@ void generateStaticRandoms( int srn, int *srnd )
             
         case ST_TOP_WEIGHT:
             // Populate top weighted array of random numbers
-            for ( int x = 0; x < sortRunPlan[ srn ].size; x++ )
+            for ( uint32_t x = 0; x < sortRunPlan[ srn ].size; x++ )
             {
                 srnd[ x ] = randNumGen_skewed( sortRunPlan[ srn ].lowerlimit, sortRunPlan[ srn ].upperlimit, 3.0f );
             }
@@ -89,7 +85,7 @@ void generateStaticRandoms( int srn, int *srnd )
             
         case ST_BOT_WEIGHT:
             // Populate bottom weighted array of random numbers
-            for ( int x = 0; x < sortRunPlan[ srn ].size; x++ )
+            for ( uint32_t x = 0; x < sortRunPlan[ srn ].size; x++ )
             {
                 srnd[ x ] = randNumGen_skewed( sortRunPlan[ srn ].lowerlimit, sortRunPlan[ srn ].upperlimit, 0.4f );
             }
@@ -99,16 +95,22 @@ void generateStaticRandoms( int srn, int *srnd )
     return;
 }
 
-void displaySortedList( int *sortedlist, int asize )
+void displaySortedList( int *sortedlist, uint32_t asize )
 {
     if( SHOW_SORTED_LIST )
     {
-        for( int x = 0; x < asize; x++ )
+        for( uint32_t x = 0; x < asize; x++ )
         {
             if( x < 4 || x > ( asize - 5 ) )
                 printf( "[%d] - %d\n", x, sortedlist[ x ] );
+    
+            if( x == (uint32_t) ( asize / 2 ) )
+                printf( "[%d] - %d\n", x, sortedlist[ x ] );
 
             if( x == 5 )
+                printf( "....\n" );
+                
+            if( x == (uint32_t) ( asize / 2 ) + 1 )
                 printf( "....\n" );
         }
         printf( "\n" );
@@ -117,28 +119,59 @@ void displaySortedList( int *sortedlist, int asize )
     return;
 }
 
-void dupRandomArray( int *static_list, int *working_list, int asize )
+void dupRandomArray( int *static_list, int *working_list, uint32_t asize )
 {
-    for ( int x = 0; x < asize; x++ )
+    for ( uint32_t x = 0; x < asize; x++ )
     {
         working_list[ x ] = static_list[ x ];
     }
 }
 
-void runSort( char *sortname, sortFun sortModule, int *staticRandoms, int asize )
+void runSort( int algorithmNum, int *staticRandoms, uint32_t asize )
 {
-    int workingRandoms[ asize ];
+    int *workingRandoms;
     int msec;
     clock_t start, diff;
-    u_int64_t iter;
+    STATS sortStats;
+    sortFun sortModule = sortAlgorithms[ algorithmNum ].sortModule;
+    int confirmedSorted;
 
-    printf( "    %16s starting...       ", sortname );
+    printf( "    %16s starting...       ", sortAlgorithms[ algorithmNum ].algorithmName );
     fflush( stdout );
+    
+    // Allocate heap for working randoms
+    workingRandoms = malloc( sizeof(int) * asize );
+    
+    // Duplicate static random array into working array (heap alloc)
     dupRandomArray( staticRandoms, workingRandoms, asize );
-    start = clock();
-    iter = sortModule( workingRandoms, asize );
+    
+    // Init algorithm stat counters before we use it
+    sortStats.iter = 0;
+    sortStats.memoryUsed = 0;
+    sortStats.memAlloc = &salloc_mem;
+    sortStats.memFree = &sfree_mem;
+
+    start = clock();    
+    sortModule( workingRandoms, asize, &sortStats );
     diff = clock() - start;
     msec = ( diff * 1000 ) / CLOCKS_PER_SEC;
-    printf( "[%20ld iterations]... complete. Time taken:[%8d.%03d] seconds.  Perf:[%.06f]\n", iter, msec/1000, msec%1000, ( (float) asize / (float) iter ) );
+    
+    confirmedSorted = TRUE;
+    
+    // Lets confirm results have been sorted
+    for( uint32_t x = 1; x < asize; x++ )
+    {
+        if( workingRandoms[ x ] < workingRandoms[ x - 1 ] )
+        {
+            confirmedSorted = FALSE;
+            if( SHOW_ISSUES )
+            {
+                printf("\nProblem at position:[%d]: [%d], which is smaller than the previous value at position:[%d]: [%d].\n", x, workingRandoms[ x ], x - 1, workingRandoms[ x - 1 ] );
+            }
+        }
+    }
+    printf( "[%16ld iterations]... complete. Time taken:[%8d.%03d] seconds.  Perf:[%.06f]  Mem Used:[%12ld] Bytes  Sorted:[%3s]\n", sortStats.iter, msec/1000, msec%1000, ( (float) asize / (float) sortStats.iter ), sortStats.memoryUsed, confirmedSorted ? "YES" : "NO" );
     displaySortedList( workingRandoms, asize );
+    
+    free( workingRandoms );
 }

@@ -1,29 +1,35 @@
 #include "sort-test.h"
 
-u_int64_t do_bubblesort( int *sortlist, int asize )
+void do_bubblesort( int *sortlist, uint32_t asize, STATS *sortStats )
 {
-    int x = 0, tmpSwap = 0, haveSwapped = 0;
-    u_int64_t iter = 0;
-
+    int *tmpSwap, *haveSwapped;
+    uint32_t *x;
+    
+    tmpSwap = (int*) sortStats->memAlloc( sizeof( int ), sortStats );
+    x = (uint32_t*) sortStats->memAlloc( sizeof( uint32_t ), sortStats );
+    haveSwapped = (int*) sortStats->memAlloc( sizeof( int ), sortStats );
+    
     do
     {
-        haveSwapped = 0;
+        *haveSwapped = 0;
 
-        for( x = 0; x < ( asize - 1 ); x++ )
+        for( *x = 0; *x < ( asize - 1 ); (*x)++ )
         {
-            if( sortlist[ x ] > sortlist[ x + 1 ] )
+            if( sortlist[ *x ] > sortlist[ *x + 1 ] )
             {
                 //swap
-                tmpSwap = sortlist[ x + 1 ];
-                sortlist[ x + 1 ] = sortlist[ x ];
-                sortlist[ x ] = tmpSwap;
-                haveSwapped = 1;
+                *tmpSwap = sortlist[ *x + 1 ];
+                sortlist[ *x + 1 ] = sortlist[ *x ];
+                sortlist[ *x ] = *tmpSwap;
+                *haveSwapped = 1;
             }
-            iter++;
+            sortStats->iter++;
         }
-        
-    } while( haveSwapped );
-
-    return( iter );
+    } while( *haveSwapped );
+    
+    sortStats->memFree( (char*) tmpSwap, sortStats );
+    sortStats->memFree( (char*) x, sortStats );
+    sortStats->memFree( (char*) haveSwapped, sortStats );
+    
+    return;
 }
-

@@ -1,32 +1,43 @@
 #include "sort-test.h"
 
-u_int64_t do_insertionsort( int *sortlist, int asize )
+void do_insertionsort( int *sortlist, uint32_t asize, STATS *sortStats )
 {
-    int x = 0, tmpSwap = 0;
-    u_int64_t iter = 0;
+    int *tmpSwap;
+    uint32_t *x, *cpos;
 
-    for( x = 1; x < ( asize ); x++ )
+    x = (uint32_t*) sortStats->memAlloc( sizeof( uint32_t ), sortStats );
+    tmpSwap = (int*) sortStats->memAlloc( sizeof( int ), sortStats );
+    cpos = (uint32_t*) sortStats->memAlloc( sizeof( uint32_t ), sortStats );
+
+    for( *x = 1; *x < ( asize ); (*x)++ )
     {
-        int cpos = x;
+        *cpos = *x;
 
         // take it to the top
         do
         {
-            if( sortlist[ cpos ] < sortlist[ cpos - 1 ] )
+            if( sortlist[ *cpos ] < sortlist[ *cpos - 1 ] )
             {
                 //swap them
-                tmpSwap = sortlist[ cpos - 1 ];
-                sortlist[ cpos - 1 ] = sortlist[ cpos ];
-                sortlist[ cpos ] = tmpSwap;
+                *tmpSwap = sortlist[ *cpos - 1 ];
+                sortlist[ *cpos - 1 ] = sortlist[ *cpos ];
+                sortlist[ *cpos ] = *tmpSwap;
             }
 
-            cpos--;
-            iter++;
+            (*cpos)--;
+            sortStats->iter++;
+            
+            if( *cpos < 1 )
+                *cpos = 1;
 
-        } while( sortlist[ cpos ] < sortlist[ cpos - 1 ] &&
-                 cpos > 0 );
+        } while( sortlist[ *cpos ] < sortlist[ *cpos - 1 ] &&
+                 *cpos > 0 );
     }
 
-    return( iter );
+    sortStats->memFree( (char*) x, sortStats );
+    sortStats->memFree( (char*) tmpSwap, sortStats );
+    sortStats->memFree( (char*) cpos, sortStats );
+    
+    return;
 }
 

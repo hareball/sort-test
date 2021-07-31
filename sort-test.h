@@ -3,10 +3,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <assert.h>
 #include <math.h>
 #include <time.h>
 
-#define SHOW_SORTED_LIST    0
+#define TRUE                1
+#define FALSE               (!TRUE) 
+
+#define SHOW_SORTED_LIST    FALSE
+#define SHOW_ISSUES         FALSE
 
 #define ST_BALANCED         0       // evenly distributed random numbers over the entire range
 #define ST_CENTRE_WEIGHT    1
@@ -27,32 +33,64 @@
     _a < _b ? _a : _b;       \
 })
 
+
 // Type definitions
-typedef u_int64_t   (*sortFun)      (int *, int);
-typedef struct      sort_ref        SORT;
+typedef struct      sort_ref            SORT;
+typedef struct      algorithm_def       ALGORITHM;
+typedef struct      stats_def           STATS;
+typedef void        ( *sortFun )        ( int *, uint32_t, STATS *);
+typedef char *      ( *allocMemFun )    ( size_t, STATS * );
+typedef void        ( *freeMemFun )     ( char *, STATS * );
 
 // Struct definitions
 struct sort_ref
 {
     char *sortName;
-    uint size;
-    uint lowerlimit;
-    uint upperlimit;
+    uint32_t size;
+    int lowerlimit;
+    int upperlimit;
     int isLarge;
     int sortType;
 };
 
+struct algorithm_def
+{
+    char *algorithmName;
+    sortFun sortModule;
+    int runLarge;
+};
+
+struct stats_def
+{
+    SORT *sortUsed;
+    ALGORITHM *algoUsed;
+    allocMemFun memAlloc;       // these mem routines don't need to be in the stats_def... need to consider taking them out
+    freeMemFun memFree;
+    uint64_t memoryUsed;       // Bytes
+    uint64_t iter;             // Lowest level loop iterations
+};
+
+// Extern definitions
+extern const SORT sortRunPlan[];
+extern const ALGORITHM sortAlgorithms[];
+extern const uint totalSortRuns;
+extern const uint totalSortAlgorithms;
+                            
 // sort functions
-u_int64_t do_bubblesort     ( int *sortlist, int asize );
-u_int64_t do_insertionsort  ( int *sortlist, int asize );
-u_int64_t do_quicksort      ( int *sortlist, int asize );
-u_int64_t do_gnomesort      ( int *sortlist, int asize );
-u_int64_t do_combsort       ( int *sortlist, int asize );
-u_int64_t do_timsort        ( int *sortlist, int asize );
-u_int64_t do_radixsort      ( int *sortlist, int asize );
+void do_bubblesort      ( int *sortlist, uint32_t asize, STATS *sortStats );
+void do_insertionsort   ( int *sortlist, uint32_t asize, STATS *sortStats );
+void do_quicksort       ( int *sortlist, uint32_t asize, STATS *sortStats );
+void do_gnomesort       ( int *sortlist, uint32_t asize, STATS *sortStats );
+void do_combsort        ( int *sortlist, uint32_t asize, STATS *sortStats );
+void do_timsort         ( int *sortlist, uint32_t asize, STATS *sortStats );
+void do_radixsort       ( int *sortlist, uint32_t asize, STATS *sortStats );
 
 // math.c functions
 int randNumGen              ( int min, int max );
 int randNumGen_skewed       ( int min, int max, float skew );
+
+// mem.c functions
+char *salloc_mem( size_t size, STATS *sortStats );
+void sfree_mem( char *memptr, STATS *sortStats );
 
 #endif

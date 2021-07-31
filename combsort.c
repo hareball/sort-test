@@ -1,40 +1,54 @@
 #include "sort-test.h"
 
-u_int64_t do_combsort( int *sortlist, int asize )
+void do_combsort( int *sortlist, uint32_t asize, STATS *sortStats )
 {
-    int tmpSwap = 0;
-    int gap = asize;
-    float shrink = 1.3f;
-    int sorted = 0;
-    int i;
-    u_int64_t iter = 0;
+    int *tmpSwap, *sorted;
+    uint32_t *gap, *i;
+    float *shrink;
 
+    tmpSwap = (int*) sortStats->memAlloc( sizeof( int ), sortStats );
+    gap = (uint32_t*) sortStats->memAlloc( sizeof( uint32_t ), sortStats );
+    shrink = (float*) sortStats->memAlloc( sizeof( float ), sortStats );
+    sorted = (int*) sortStats->memAlloc( sizeof( int ), sortStats );
+    i = (uint32_t*) sortStats->memAlloc( sizeof( uint32_t ), sortStats );
+    
+    *tmpSwap = 0;
+    *gap = asize;
+    *shrink = 1.3f;
+    *sorted = 0;
+    
     do
     {
-        gap = floor( gap / shrink );
-        if( gap < 1 )
+        *gap = floor( *gap / *shrink );
+        if( *gap < 1 )
         {
-            gap = 1;
-            sorted = 1;
+            *gap = 1;
+            *sorted = 1;
         }
 
-        i = 0;
+        *i = 0;
 
-        while( ( i + gap ) < asize )
+        while( ( *i + *gap ) < asize )
         {
-            if( sortlist[ i ] > sortlist[ i + gap ] )
+            if( sortlist[ *i ] > sortlist[ *i + *gap ] )
             {
-                tmpSwap = sortlist[ i ];
-                sortlist[ i ] = sortlist[ i + gap ];
-                sortlist[ i + gap ] = tmpSwap;
-                sorted = 0;
+                *tmpSwap = sortlist[ *i ];
+                sortlist[ *i ] = sortlist[ *i + *gap ];
+                sortlist[ *i + *gap ] = *tmpSwap;
+                *sorted = 0;
             }
 
-            i++;
-            iter++;
+            (*i)++;
+            sortStats->iter++;
         }
 
-    } while( !sorted );
+    } while( !*sorted );
+    
+    sortStats->memFree( (char*) tmpSwap, sortStats );
+    sortStats->memFree( (char*) gap, sortStats );
+    sortStats->memFree( (char*) shrink, sortStats );
+    sortStats->memFree( (char*) sorted, sortStats );
+    sortStats->memFree( (char*) i, sortStats );
 
-    return( iter );
+    return;
 }

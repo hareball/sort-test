@@ -1,29 +1,36 @@
 #include "sort-test.h"
 
-u_int64_t do_gnomesort( int *sortlist, int asize )
+void do_gnomesort( int *sortlist, uint32_t asize, STATS *sortStats )
 {
-    int pos = 0, tmpSwap = 0;
-    u_int64_t iter = 0;
-
+    int *tmpSwap;
+    uint32_t *pos;
+    
+    pos = (uint32_t*) sortStats->memAlloc( sizeof( uint32_t ), sortStats );
+    tmpSwap = (int*) sortStats->memAlloc( sizeof( int ), sortStats );
+    
+    *pos = 0;
+    
     do
     {
-        if( pos == 0 ||
-            sortlist[ pos ] >= sortlist[ pos - 1 ] )
+        if( *pos == 0 ||
+            sortlist[ *pos ] >= sortlist[ *pos - 1 ] )
         {
-            pos++;
+            (*pos)++;
         }
         else
         {
-            tmpSwap = sortlist[ pos ];
-            sortlist[ pos ] = sortlist[ pos - 1 ];
-            sortlist[ pos - 1 ] = tmpSwap;
-            pos--;
+            *tmpSwap = sortlist[ *pos ];
+            sortlist[ *pos ] = sortlist[ *pos - 1 ];
+            sortlist[ *pos - 1 ] = *tmpSwap;
+            (*pos)--;
         }
+        
+        sortStats->iter++;
+        
+    } while( *pos < asize );
 
-        iter++;
-
-
-    } while( pos < asize );
-
-    return( iter );
+    sortStats->memFree( (char*) pos, sortStats );
+    sortStats->memFree( (char*) tmpSwap, sortStats );
+    
+    return;
 }
