@@ -13,6 +13,10 @@
 
 #define SHOW_SORTED_LIST    FALSE
 #define SHOW_ISSUES         FALSE
+#define SHOW_DEACTIVE_NORM  TRUE
+#define SHOW_DEACTIVE_HUGE  FALSE
+
+#define MAX_STRING_SIZE     1024
 
 #define ST_BALANCED         0       // evenly distributed random numbers over the entire range
 #define ST_CENTRE_WEIGHT    1
@@ -35,29 +39,31 @@
 
 
 // Type definitions
-typedef struct      sort_ref            SORT;
+typedef struct      sortplan_def        SORT;
 typedef struct      algorithm_def       ALGORITHM;
 typedef struct      stats_def           STATS;
-typedef void        ( *sortFun )        ( int *, uint32_t, STATS *);
+typedef void        ( *sortFun )        ( int *, uint32_t, STATS * );
 typedef char *      ( *allocMemFun )    ( size_t, STATS * );
 typedef void        ( *freeMemFun )     ( char *, STATS * );
 
 // Struct definitions
-struct sort_ref
+struct sortplan_def
 {
     char *sortName;
     uint32_t size;
     int lowerlimit;
     int upperlimit;
-    int isLarge;
+    int active;
+    int isHuge;
     int sortType;
 };
 
 struct algorithm_def
 {
     char *algorithmName;
+    int active;
+    int runHuge;
     sortFun sortModule;
-    int runLarge;
 };
 
 struct stats_def

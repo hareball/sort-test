@@ -2,11 +2,20 @@
 
 const int QS_MAX_LEVELS = 1000;
 
+void cleanup( int *piv, int *beg, int *end, int64_t *i, int64_t *L, int64_t *R, STATS *sortStats )
+{
+    sortStats->memFree( (char*) piv, sortStats );
+    sortStats->memFree( (char*) i, sortStats );
+    sortStats->memFree( (char*) beg, sortStats );
+    sortStats->memFree( (char*) end, sortStats );
+    sortStats->memFree( (char*) L, sortStats );
+    sortStats->memFree( (char*) R, sortStats );
+}
+
 void do_quicksort( int *sortlist, uint32_t asize, STATS *sortStats )
 {
     int *piv, *beg, *end;
-    int64_t *i;
-    int64_t  *L, *R;
+    int64_t *i, *L, *R;
     
     piv = (int*) sortStats->memAlloc( sizeof( int ), sortStats );
     i = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
@@ -29,6 +38,7 @@ void do_quicksort( int *sortlist, uint32_t asize, STATS *sortStats )
             *piv = sortlist[ *L ];
             if( *i == QS_MAX_LEVELS - 1 )
             {
+                cleanup( piv, beg, end, i, L, R, sortStats );
                 return;
             }
 
@@ -68,13 +78,7 @@ void do_quicksort( int *sortlist, uint32_t asize, STATS *sortStats )
             sortStats->iter++;
         }
     }
-    
-    sortStats->memFree( (char*) piv, sortStats );
-    sortStats->memFree( (char*) i, sortStats );
-    sortStats->memFree( (char*) beg, sortStats );
-    sortStats->memFree( (char*) end, sortStats );
-    sortStats->memFree( (char*) L, sortStats );
-    sortStats->memFree( (char*) R, sortStats );
-    
+
+    cleanup( piv, beg, end, i, L, R, sortStats );    
     return;
 }
