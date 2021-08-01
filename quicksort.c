@@ -1,6 +1,6 @@
 #include "sort-test.h"
 
-const int QS_MAX_LEVELS = 1000;
+const int QS_MAX_LEVELS = 10000;
 
 void cleanup( int *piv, int *beg, int *end, int64_t *i, int64_t *L, int64_t *R, STATS *sortStats )
 {
