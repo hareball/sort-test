@@ -1,3 +1,27 @@
+
+/*
+ * sort-test
+ * 
+ * Copyright (C) 2021 Dan Hare
+ *
+ * This file is part of sort-test, a free suite of sort algorithms
+ *
+ * sort-test is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version
+ *
+ * sort-test is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ */
+ 
 #include "sort-test.h"
 
 /* Predeclare functions */
@@ -5,6 +29,7 @@ void displaySortedList( int *sortedlist, uint32_t asize );
 void dupRandomArray( int *static_list, int *working_list, uint32_t asize );
 void runSort( int algorithmNum, int *staticRandoms, uint sortRunNum );
 void generateStaticRandoms( int srn, int *srnd );
+
 uint32_t getLargestSortSize();
 
 int main()
@@ -27,8 +52,9 @@ int main()
             // Generate static randoms to be sorted
             generateStaticRandoms( sortRunNum, &staticRandoms[0] );
                 
-            printf( "\n--- %d Random numbers generated [%s] ---\n", sortRunPlan[ sortRunNum ].size, 
+            write_log( "\n@r--- @w%d Random numbers generated @y[@m%s@y] @r---@w\n", sortRunPlan[ sortRunNum ].size, 
                                                                     sortRunPlan[ sortRunNum ].sortName );
+
 
             for( sortAlgoNumber = 0; sortAlgoNumber < totalSortAlgorithms; sortAlgoNumber++ )
             {
@@ -37,7 +63,7 @@ int main()
         }
         else
         {
-            printf( "\n--- Not active, skipping [%s] ---\n", sortRunPlan[ sortRunNum ].sortName );
+           write_log( "\n@r--- @wNot active, skipping @y[@m%s@y] @r---@w\n", sortRunPlan[ sortRunNum ].sortName );
         }
 
         sortRunNum++;
@@ -45,7 +71,7 @@ int main()
     
     free( staticRandoms );
         
-    printf("\nSorting Complete.\n\n");
+    write_log("\nSorting Complete.\n\n");
     
     return( 0 );
 }
@@ -102,18 +128,18 @@ void displaySortedList( int *sortedlist, uint32_t asize )
         for( uint32_t x = 0; x < asize; x++ )
         {
             if( x < 4 || x > ( asize - 5 ) )
-                printf( "[%d] - %d\n", x, sortedlist[ x ] );
+                write_log( "[%d] - %d\n", x, sortedlist[ x ] );
     
             if( x == (uint32_t) ( asize / 2 ) )
-                printf( "[%d] - %d\n", x, sortedlist[ x ] );
+                write_log( "[%d] - %d\n", x, sortedlist[ x ] );
 
             if( x == 5 )
-                printf( "....\n" );
+                write_log( "....\n" );
                 
             if( x == (uint32_t) ( asize / 2 ) + 1 )
-                printf( "....\n" );
+                write_log( "....\n" );
         }
-        printf( "\n" );
+        write_log( "\n" );
     }
 
     return;
@@ -135,7 +161,8 @@ void runSort( int algorithmNum, int *staticRandoms, uint sortRunNum )
     STATS sortStats;
     sortFun sortModule = sortAlgorithms[ algorithmNum ].sortModule;
     uint32_t asize;
-    char reason[MAX_STRING_SIZE];
+    char reason[ MAX_STRING_SIZE ], buff[ MAX_STRING_SIZE ];
+    
 
     asize = sortRunPlan[ sortRunNum ].size;
     hugePlanSort = sortRunPlan[ sortRunNum ].isHuge && !sortAlgorithms[ algorithmNum ].runHuge;
@@ -151,14 +178,14 @@ void runSort( int algorithmNum, int *staticRandoms, uint sortRunNum )
             else
                 sprintf( reason, "%s", "deactivated" );
                 
-            printf( "    %16s --- not running (%s) ---\n", sortAlgorithms[ algorithmNum ].algorithmName, reason );
+            write_log( "    @b%16s@w @r--- @wnot running @y(@w%s@y) @r---@w\n", sortAlgorithms[ algorithmNum ].algorithmName, reason );
             fflush( stdout );
         }
         
         return;
     }
    
-    printf( "    %16s starting...       ", sortAlgorithms[ algorithmNum ].algorithmName );
+    write_log( "    @b%16s @wstarting...       ", sortAlgorithms[ algorithmNum ].algorithmName );
     fflush( stdout );
     
     // Allocate heap for working randoms
@@ -189,15 +216,32 @@ void runSort( int algorithmNum, int *staticRandoms, uint sortRunNum )
             confirmedSorted = FALSE;
             if( SHOW_ISSUES )
             {
-                printf("\nProblem at position:[%d]: [%d], which is smaller than the previous value at position:[%d]: [%d].\n", 
-                       x, workingRandoms[ x ], x - 1, workingRandoms[ x - 1 ] );
+                write_log("\nProblem at position:[%d]: [%d], which is smaller than the previous value at position:[%d]: [%d].\n", 
+                          x, workingRandoms[ x ], x - 1, workingRandoms[ x - 1 ] );
             }
         }
     }
-    printf( "[%16ld iterations]... complete. Time taken:[%8d.%03d] seconds.  Perf:[%.06f]  Mem Used:[%12ld] Bytes  Sorted:[%3s]\n", 
-            sortStats.iter, msec/1000, msec%1000, ( (float) asize / (float) sortStats.iter ), 
-            sortStats.memoryUsed, confirmedSorted ? "YES" : "NO" );
+    sprintf( buff, "@y[@c%16ld@y]@w iterations... complete. Time taken:@y[@c%8d.%03d@y]@w seconds.  Perf:@y[@c%.06f@y]@w  Mem Used:@y[@c%12ld@y]@w Bytes  Sorted:@y[%3s@y]@w\n", 
+             sortStats.iter, msec/1000, msec%1000, ( (float) asize / (float) sortStats.iter ), 
+             sortStats.memoryUsed, confirmedSorted ? "@gYES" : "@rNO" );
+    write_log( buff );
     displaySortedList( workingRandoms, asize );
     
     free( workingRandoms );
+}
+
+void write_log( char *fmt, ... )
+{
+    va_list args;
+    
+    char dst[ MAX_STRING_SIZE ];
+
+    va_start( args, fmt );
+        
+    add_colour( dst, fmt );
+
+    vprintf( dst, args );
+    va_end( args );
+
+    fflush( stdout );
 }

@@ -1,9 +1,36 @@
+
+/*
+ * sort-test
+ * 
+ * Copyright (C) 2021 Dan Hare
+ *
+ * This file is part of sort-test, a free suite of sort algorithms
+ *
+ * sort-test is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version
+ *
+ * sort-test is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ */
+ 
 #ifndef __ST_H__
 #define __ST_H__
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+#include <ctype.h>
 #include <assert.h>
 #include <math.h>
 #include <time.h>
@@ -11,12 +38,13 @@
 #define TRUE                1
 #define FALSE               (!TRUE) 
 
+#define SHOW_COLOUR         TRUE
 #define SHOW_SORTED_LIST    FALSE
 #define SHOW_ISSUES         FALSE
 #define SHOW_DEACTIVE_NORM  TRUE
-#define SHOW_DEACTIVE_HUGE  FALSE
+#define SHOW_DEACTIVE_HUGE  TRUE
 
-#define MAX_STRING_SIZE     1024
+#define MAX_STRING_SIZE     2048
 
 #define ST_BALANCED         0       // evenly distributed random numbers over the entire range
 #define ST_CENTRE_WEIGHT    1
@@ -37,6 +65,32 @@
     _a < _b ? _a : _b;       \
 })
 
+#define COLOUR_START    "\033["
+#define COLOUR_STOP     "^[[m"
+
+// Foreground colours
+#define CF_BLACK        ";30"           // @l
+#define CF_RED          ";31"           // @r
+#define CF_GREEN        ";32"           // @g
+#define CF_YELLOW       ";33"           // @y
+#define CF_BLUE         ";34"           // @b
+#define CF_MAGENTA      ";35"           // @m
+#define CF_CYAN         ";36"           // @c
+#define CF_WHITE        ";37"           // @w
+
+// Background colours
+#define CB_BLACK        ";40"           // @kl
+#define CB_RED          ";41"           // @kr
+#define CB_GREEN        ";42"           // @kg
+#define CB_YELLOW       ";43"           // @ky
+#define CB_BLUE         ";44"           // @kb
+#define CB_MAGENTA      ";45"           // @km
+#define CB_CYAN         ";46"           // @kc
+#define CB_WHITE        ";47"           // @kw
+
+#define C_BOLD          ";1"
+#define C_FLASH         ";5"
+#define C_NORMAL        ";0"
 
 // Type definitions
 typedef struct      sortplan_def        SORT;
@@ -90,6 +144,7 @@ void do_gnomesort       ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_combsort        ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_timsort         ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_radixsort       ( int *sortlist, uint32_t asize, STATS *sortStats );
+void do_heapsort        ( int *sortlist, uint32_t asize, STATS *sortStats );
 
 // math.c functions
 int randNumGen              ( int min, int max );
@@ -98,5 +153,11 @@ int randNumGen_skewed       ( int min, int max, float skew );
 // mem.c functions
 char *salloc_mem( size_t size, STATS *sortStats );
 void sfree_mem( char *memptr, STATS *sortStats );
+
+// sort-test.c functions
+void write_log( char *fmt, ... );
+
+// color.c functions
+void add_colour( char *dest, const char *src );
 
 #endif
