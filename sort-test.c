@@ -178,14 +178,14 @@ void runSort( int algorithmNum, int *staticRandoms, uint sortRunNum )
             else
                 sprintf( reason, "%s", "deactivated" );
                 
-            write_log( "    @b%16s@w @r--- @wnot running @y(@w%s@y) @r---@w\n", sortAlgorithms[ algorithmNum ].algorithmName, reason );
+            write_log( "    @b%22s@w @r--- @wnot running @y(@w%s@y) @r---@w\n", sortAlgorithms[ algorithmNum ].algorithmName, reason );
             fflush( stdout );
         }
         
         return;
     }
    
-    write_log( "    @b%16s @wstarting...       ", sortAlgorithms[ algorithmNum ].algorithmName );
+    write_log( "    @b%22s @wstarting...       ", sortAlgorithms[ algorithmNum ].algorithmName );
     fflush( stdout );
     
     // Allocate heap for working randoms

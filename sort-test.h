@@ -143,7 +143,8 @@ void do_quicksort       ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_gnomesort       ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_combsort        ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_timsort         ( int *sortlist, uint32_t asize, STATS *sortStats );
-void do_radixsort       ( int *sortlist, uint32_t asize, STATS *sortStats );
+void do_radix10sort     ( int *sortlist, uint32_t asize, STATS *sortStats );
+void do_radix256sort    ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_heapsort        ( int *sortlist, uint32_t asize, STATS *sortStats );
 
 // math.c functions
@@ -159,5 +160,8 @@ void write_log( char *fmt, ... );
 
 // color.c functions
 void add_colour( char *dest, const char *src );
+
+// radix10sort.c
+int getMax( int *arr, uint32_t n, STATS *sortStats );
 
 #endif

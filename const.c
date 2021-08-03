@@ -39,14 +39,15 @@ const SORT sortRunPlan[] =  {
                             };
                             
 const ALGORITHM sortAlgorithms[] =  {
-                                        { "Bubble Sort",    TRUE,   FALSE,  &do_bubblesort      },
-                                        { "Insertion Sort", TRUE,   FALSE,  &do_insertionsort   },
-                                        { "Gnome Sort",     TRUE,   FALSE,  &do_gnomesort       },
-                                        { "Quick Sort",     TRUE,   TRUE,   &do_quicksort       },
-                                        { "Comb Sort",      TRUE,   TRUE,   &do_combsort        },
-                                        { "Tim Sort",       TRUE,   TRUE,   &do_timsort         },
-                                        { "Radix Sort",     TRUE,   TRUE,   &do_radixsort       },
-                                        { "Heap Sort",      TRUE,   FALSE,  &do_heapsort        }
+                                        { "Bubble Sort",            TRUE,   FALSE,  &do_bubblesort      },
+                                        { "Insertion Sort",         TRUE,   FALSE,  &do_insertionsort   },
+                                        { "Gnome Sort",             TRUE,   FALSE,  &do_gnomesort       },
+                                        { "Quick Sort",             TRUE,   TRUE,   &do_quicksort       },
+                                        { "Comb Sort",              TRUE,   TRUE,   &do_combsort        },
+                                        { "Tim Sort",               TRUE,   TRUE,   &do_timsort         },
+                                        { "Radix Sort (base  10)",  TRUE,   TRUE,   &do_radix10sort     },
+                                        { "Radix Sort (base 256)",  TRUE,   TRUE,   &do_radix256sort    },
+                                        { "Heap Sort",              TRUE,   FALSE,  &do_heapsort        }
                                     };
 
 const uint totalSortRuns = sizeof( sortRunPlan ) / sizeof( struct sortplan_def );

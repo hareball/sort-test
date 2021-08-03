@@ -34,10 +34,12 @@
 */
 
 /*
- * Radix sort based on code from Geeksforgeeks.com
+ * Radix base 10 sort based on code from Geeksforgeeks.com
  */
  
 #include "sort-test.h"
+
+const int rbase10 = 10;
  
 int getMax( int *arr, uint32_t n, STATS *sortStats )
 {
@@ -64,15 +66,15 @@ int getMax( int *arr, uint32_t n, STATS *sortStats )
     return( retMax );
 }
 
-void countSort( int *arr, uint32_t n, int exp, STATS *sortStats )
+void radixCountSort10( int *arr, uint32_t n, int exp, STATS *sortStats )
 {  
     int *output, *i, *count;
     
     output = (int*) sortStats->memAlloc( sizeof( int ) * n, sortStats );
     i = (int*) sortStats->memAlloc( sizeof( int ), sortStats );
-    count = (int*) sortStats->memAlloc( sizeof( int ) * 10, sortStats );
+    count = (int*) sortStats->memAlloc( sizeof( int ) * rbase10, sortStats );
     
-    for( *i = 0; *i < 10; (*i)++ )
+    for( *i = 0; *i < rbase10; (*i)++ )
     {
         count[ *i ] = 0;
         sortStats->iter++;
@@ -80,11 +82,11 @@ void countSort( int *arr, uint32_t n, int exp, STATS *sortStats )
          
     for( *i = 0; *i < n; (*i)++ )
     {
-        count[ ( arr[ *i ] / exp ) % 10 ]++;
+        count[ ( arr[ *i ] / exp ) % rbase10 ]++;
         sortStats->iter++;
     }
  
-    for( *i = 1; *i < 10; (*i)++ )
+    for( *i = 1; *i < rbase10; (*i)++ )
     {
         count[ *i ] += count[ *i - 1 ];
         sortStats->iter++;
@@ -92,8 +94,8 @@ void countSort( int *arr, uint32_t n, int exp, STATS *sortStats )
  
     for( *i = n - 1; *i >= 0; (*i)-- ) 
     {
-        output[ count[ ( arr[ *i ] / exp ) % 10 ] - 1 ] = arr[ *i ];
-        count[ ( arr[ *i ] / exp ) % 10 ]--;
+        output[ count[ ( arr[ *i ] / exp ) % rbase10 ] - 1 ] = arr[ *i ];
+        count[ ( arr[ *i ] / exp ) % rbase10 ]--;
         sortStats->iter++;
     }
  
@@ -108,7 +110,7 @@ void countSort( int *arr, uint32_t n, int exp, STATS *sortStats )
     sortStats->memFree( (char*) count, sortStats );
 }
  
-void do_radixsort( int *sortlist, uint32_t asize, STATS *sortStats )
+void do_radix10sort( int *sortlist, uint32_t asize, STATS *sortStats )
 {
     int *m, *exp;
     
@@ -117,9 +119,9 @@ void do_radixsort( int *sortlist, uint32_t asize, STATS *sortStats )
     
     *m = getMax( sortlist, asize, sortStats );
 
-    for( *exp = 1; *m / *exp > 0; (*exp) *= 10 )
+    for( *exp = 1; *m / *exp > 0; (*exp) *= rbase10 )
     {
-        countSort( sortlist, asize, *exp, sortStats );
+        radixCountSort10( sortlist, asize, *exp, sortStats );
     }
     
     sortStats->memFree( (char*) m, sortStats );
