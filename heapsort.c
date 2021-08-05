@@ -39,7 +39,10 @@
  
 #include "sort-test.h"
 
-void swap( int *xp, int *yp, int *temp )
+static int64_t *largest, *l, *r;
+static int *temp;
+
+void swap( int *xp, int *yp )
 {
     *temp = *xp;
     *xp = *yp;
@@ -47,15 +50,7 @@ void swap( int *xp, int *yp, int *temp )
 }
 
 void heapify( int *arr, int64_t n, int64_t i, STATS *sortStats )
-{
-    int64_t *largest, *l, *r;
-    int *temp;
-    
-    largest = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
-    l = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
-    r = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
-    temp = (int*) sortStats->memAlloc( sizeof( int ), sortStats );
-    
+{   
     *largest = i;
     *l = 2 * i + 1;
     *r = 2 * i + 2;
@@ -68,25 +63,22 @@ void heapify( int *arr, int64_t n, int64_t i, STATS *sortStats )
 
     if( *largest != i ) 
     {
-        swap( &arr[ i ], &arr[ *largest ], temp );
+        swap( &arr[ i ], &arr[ *largest ] );
         heapify( arr, n, *largest, sortStats );
     }
     
     sortStats->iter++;
-    
-    sortStats->memFree( (char*) largest, sortStats );
-    sortStats->memFree( (char*) l, sortStats );
-    sortStats->memFree( (char*) r, sortStats );
-    sortStats->memFree( (char*) temp, sortStats );
 }
 
 void do_heapsort(int *sortlist, uint32_t asize, STATS *sortStats )
 {
-    int *temp;
     int64_t *i;
     
     i = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
     temp = (int*) sortStats->memAlloc( sizeof( int ), sortStats );
+    largest = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
+    l = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
+    r = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
     
     for( *i = ( asize / 2 ) - 1; *i >= 0; (*i)-- )
     {
@@ -95,10 +87,13 @@ void do_heapsort(int *sortlist, uint32_t asize, STATS *sortStats )
     
     for( *i = asize - 1; *i > 0; (*i)-- ) 
     {
-        swap( &sortlist[ 0 ], &sortlist[ *i ], temp );
+        swap( &sortlist[ 0 ], &sortlist[ *i ] );
         heapify( sortlist, *i, 0, sortStats );
     }
     
     sortStats->memFree( (char*) i, sortStats );
-    sortStats->memFree( (char*) temp, sortStats );    
+    sortStats->memFree( (char*) temp, sortStats );
+    sortStats->memFree( (char*) largest, sortStats );
+    sortStats->memFree( (char*) l, sortStats );
+    sortStats->memFree( (char*) r, sortStats );
 }
