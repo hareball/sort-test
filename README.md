@@ -11,3 +11,13 @@ extract to a directory, type make
 run sort-test in shell, i.e. ./sort-test
 
 I've only tested this on ubuntu 18.04, but it (probably) runs on other linux versions.
+
+Current sort algorithms:
+* Bubble sort
+* Insertion sort
+* Gnome sort
+* Comb sort
+* Heap sort
+* Quick sort
+* Radix sort
+* Tim sort
