@@ -146,6 +146,7 @@ void do_timsort         ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_radix10sort     ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_radix256sort    ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_heapsort        ( int *sortlist, uint32_t asize, STATS *sortStats );
+void do_cyclesort       ( int *sortlist, uint32_t asize, STATS *sortStats );
 
 // math.c functions
 int randNumGen              ( int min, int max );
@@ -156,6 +157,7 @@ char *salloc_mem( size_t size, STATS *sortStats );
 void sfree_mem( char *memptr, STATS *sortStats );
 
 // sort-test.c functions
+void swap( int *xp, int *yp );
 void write_log( char *fmt, ... );
 
 // color.c functions

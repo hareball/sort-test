@@ -40,14 +40,6 @@
 #include "sort-test.h"
 
 static int64_t *largest, *l, *r;
-static int *temp;
-
-void swap( int *xp, int *yp )
-{
-    *temp = *xp;
-    *xp = *yp;
-    *yp = *temp;
-}
 
 void heapify( int *arr, int64_t n, int64_t i, STATS *sortStats )
 {   
@@ -75,7 +67,6 @@ void do_heapsort(int *sortlist, uint32_t asize, STATS *sortStats )
     int64_t *i;
     
     i = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
-    temp = (int*) sortStats->memAlloc( sizeof( int ), sortStats );
     largest = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
     l = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
     r = (int64_t*) sortStats->memAlloc( sizeof( int64_t ), sortStats );
@@ -92,7 +83,6 @@ void do_heapsort(int *sortlist, uint32_t asize, STATS *sortStats )
     }
     
     sortStats->memFree( (char*) i, sortStats );
-    sortStats->memFree( (char*) temp, sortStats );
     sortStats->memFree( (char*) largest, sortStats );
     sortStats->memFree( (char*) l, sortStats );
     sortStats->memFree( (char*) r, sortStats );

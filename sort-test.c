@@ -32,6 +32,7 @@ void generateStaticRandoms( int srn, int *srnd );
 
 uint32_t getLargestSortSize();
 
+
 int main()
 {
     time_t t;
@@ -87,6 +88,15 @@ uint32_t getLargestSortSize()
     }
     
     return( largestSize );
+}
+
+void swap( int *xp, int *yp )
+{
+	static int temp;
+	
+    temp = *xp;
+    *xp = *yp;
+    *yp = temp;
 }
 
 void generateStaticRandoms( int srn, int *srnd )

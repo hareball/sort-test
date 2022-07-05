@@ -47,7 +47,8 @@ const ALGORITHM sortAlgorithms[] =  {
                                         { "Tim Sort",               TRUE,   TRUE,   &do_timsort         },
                                         { "Radix Sort (base  10)",  TRUE,   TRUE,   &do_radix10sort     },
                                         { "Radix Sort (base 256)",  TRUE,   TRUE,   &do_radix256sort    },
-                                        { "Heap Sort",              TRUE,   TRUE,   &do_heapsort        }
+                                        { "Heap Sort",              TRUE,   TRUE,   &do_heapsort        },
+                                        { "Cycle Sort",             TRUE,   FALSE,  &do_cyclesort       }
                                     };
 
 const uint totalSortRuns = sizeof( sortRunPlan ) / sizeof( struct sortplan_def );
