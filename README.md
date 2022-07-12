@@ -21,3 +21,5 @@ Current sort algorithms:
 * Quick sort
 * Radix sort
 * Tim sort
+* Cycle sort
+* Bitonic sort
