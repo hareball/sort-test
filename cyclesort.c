@@ -63,17 +63,17 @@ void do_cyclesort( int *sortlist, uint32_t asize, STATS *sortStats )
             {
                 (*pos)++;
                 sortStats->iter++;
-			}
-		}
+            }
+        }
 
         if( *pos == *cycle_start )
             continue;
 
         while( *item == sortlist[ *pos ] )
         {
-			(*pos)++;
-			sortStats->iter++;
-		}
+            (*pos)++;
+            sortStats->iter++;
+        }
 
         if( *pos != *cycle_start ) 
         {
@@ -89,20 +89,20 @@ void do_cyclesort( int *sortlist, uint32_t asize, STATS *sortStats )
             {
                 if( sortlist[ *si ] < *item )
                 {
-					(*pos)++;
-					sortStats->iter++;
-				}
-			}
+                    (*pos)++;
+                    sortStats->iter++;
+                }
+            }
  
             while( *item == sortlist[ *pos ] )
             {
-				(*pos)++;
-				sortStats->iter++;
-			}
+                (*pos)++;
+                sortStats->iter++;
+            }
 
             if( *item != sortlist[ *pos ] ) 
             {
-				swap( item, &sortlist[ *pos ] );
+                swap( item, &sortlist[ *pos ] );
                 sortStats->iter++;
             }
         }

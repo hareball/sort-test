@@ -44,3 +44,10 @@ void sfree_mem( char *memptr, STATS *sortStats )
     free( memptr );
     return;
 }
+
+/* For recursive functions, if we need to show stack memory used -- does not allocate any memory */
+void sadd_stackmem( size_t size, STATS *sortStats )
+{
+    sortStats->memoryUsed += size;
+    return;
+}

@@ -26,16 +26,16 @@
 
 /* List of sort types to run */
 const SORT sortRunPlan[] =  {
-                                { "Small Balanced sort",            20,         0, 20,      TRUE,   FALSE, ST_BALANCED     },
-                                { "Medium Balanced sort",           5000,       0, 5000,    TRUE,   FALSE, ST_BALANCED     },
-                                { "Large Balanced sort",            50000,      0, 50000,   TRUE,   FALSE, ST_BALANCED     },
-                                { "Small Top Weighted sort",        20,         0, 20,      TRUE,   FALSE, ST_TOP_WEIGHT   },
-                                { "Medium Top Weighted sort",       5000,       0, 5000,    TRUE,   FALSE, ST_TOP_WEIGHT   },
-                                { "Large Top Weighted sort",        50000,      0, 50000,   TRUE,   FALSE, ST_TOP_WEIGHT   },
-                                { "Small Bottom Weighted sort",     20,         0, 20,      TRUE,   FALSE, ST_BOT_WEIGHT   },
-                                { "Medium Bottom Weighted sort",    5000,       0, 5000,    TRUE,   FALSE, ST_BOT_WEIGHT   },
-                                { "Large Bottom Weighted sort",     50000,      0, 50000,   TRUE,   FALSE, ST_BOT_WEIGHT   },
-                                { "Huge Balanced Sort",             50000000,   0, 100000,  TRUE,   TRUE,  ST_BALANCED     }
+                                { "Small Balanced sort",            32,         0, 20,      TRUE,   FALSE, ST_BALANCED     },
+                                { "Medium Balanced sort",           4096,       0, 5000,    TRUE,   FALSE, ST_BALANCED     },
+                                { "Large Balanced sort",            32768,      0, 50000,   TRUE,   FALSE, ST_BALANCED     },
+                                { "Small Top Weighted sort",        32,         0, 32,      TRUE,   FALSE, ST_TOP_WEIGHT   },
+                                { "Medium Top Weighted sort",       4096,       0, 5000,    TRUE,   FALSE, ST_TOP_WEIGHT   },
+                                { "Large Top Weighted sort",        32768,      0, 50000,   TRUE,   FALSE, ST_TOP_WEIGHT   },
+                                { "Small Bottom Weighted sort",     32,         0, 32,      TRUE,   FALSE, ST_BOT_WEIGHT   },
+                                { "Medium Bottom Weighted sort",    4096,       0, 5000,    TRUE,   FALSE, ST_BOT_WEIGHT   },
+                                { "Large Bottom Weighted sort",     32768,      0, 50000,   TRUE,   FALSE, ST_BOT_WEIGHT   },
+                                { "Huge Balanced Sort",             33554432,   0, 100000,  TRUE,   TRUE,  ST_BALANCED     }
                             };
                             
 const ALGORITHM sortAlgorithms[] =  {
@@ -48,7 +48,8 @@ const ALGORITHM sortAlgorithms[] =  {
                                         { "Radix Sort (base  10)",  TRUE,   TRUE,   &do_radix10sort     },
                                         { "Radix Sort (base 256)",  TRUE,   TRUE,   &do_radix256sort    },
                                         { "Heap Sort",              TRUE,   TRUE,   &do_heapsort        },
-                                        { "Cycle Sort",             TRUE,   FALSE,  &do_cyclesort       }
+                                        { "Cycle Sort",             TRUE,   FALSE,  &do_cyclesort       },
+                                        { "Bitonic Sort",           TRUE,   FALSE,  &do_bitonicsort     }
                                     };
 
 const uint totalSortRuns = sizeof( sortRunPlan ) / sizeof( struct sortplan_def );

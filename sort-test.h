@@ -99,6 +99,7 @@ typedef struct      stats_def           STATS;
 typedef void        ( *sortFun )        ( int *, uint32_t, STATS * );
 typedef char *      ( *allocMemFun )    ( size_t, STATS * );
 typedef void        ( *freeMemFun )     ( char *, STATS * );
+typedef void        ( *addStackMemFun ) ( size_t, STATS * );
 
 // Struct definitions
 struct sortplan_def
@@ -126,6 +127,7 @@ struct stats_def
     ALGORITHM *algoUsed;
     allocMemFun memAlloc;       // these mem routines don't need to be in the stats_def... need to consider taking them out
     freeMemFun memFree;
+    addStackMemFun addStackMem;
     uint64_t memoryUsed;       // Bytes
     uint64_t iter;             // Lowest level loop iterations
 };
@@ -147,6 +149,7 @@ void do_radix10sort     ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_radix256sort    ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_heapsort        ( int *sortlist, uint32_t asize, STATS *sortStats );
 void do_cyclesort       ( int *sortlist, uint32_t asize, STATS *sortStats );
+void do_bitonicsort     ( int *sortlist, uint32_t asize, STATS *sortStats );
 
 // math.c functions
 int randNumGen              ( int min, int max );
@@ -155,6 +158,7 @@ int randNumGen_skewed       ( int min, int max, float skew );
 // mem.c functions
 char *salloc_mem( size_t size, STATS *sortStats );
 void sfree_mem( char *memptr, STATS *sortStats );
+void sadd_stackmem( size_t size, STATS *sortStats );
 
 // sort-test.c functions
 void swap( int *xp, int *yp );

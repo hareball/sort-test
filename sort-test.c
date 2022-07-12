@@ -92,8 +92,8 @@ uint32_t getLargestSortSize()
 
 void swap( int *xp, int *yp )
 {
-	static int temp;
-	
+    static int temp;
+    
     temp = *xp;
     *xp = *yp;
     *yp = temp;
@@ -209,6 +209,7 @@ void runSort( int algorithmNum, int *staticRandoms, uint sortRunNum )
     sortStats.memoryUsed = 0;
     sortStats.memAlloc = &salloc_mem;
     sortStats.memFree = &sfree_mem;
+    sortStats.addStackMem = &sadd_stackmem;
     
     // Lets run the sort module
     start = clock();    
