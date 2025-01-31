@@ -29,20 +29,39 @@ void displaySortedList( int *sortedlist, uint32_t asize );
 void dupRandomArray( int *static_list, int *working_list, uint32_t asize );
 void runSort( int algorithmNum, int *staticRandoms, uint sortRunNum );
 void generateStaticRandoms( int srn, int *srnd );
+void parseArgs( int argc, char *argv[] );
 
+/* Local scope vars */
 uint32_t getLargestSortSize();
+uint arg_seed = 0;
+uint seed_provided = FALSE;
 
-
-int main()
+int main( int argc, char *argv[] )
 {
     time_t t;
     int *staticRandoms;
     uint sortRunNum = 0;
     uint sortAlgoNumber;
+    uint rseed;
     
+    // Parse arguments
+    parseArgs( argc, argv );
+
     // Init random number generator
-    srand( (unsigned) time( &t ) );
-    
+    if( seed_provided )
+    {
+        write_log( "\n@r--- @wUsing random seed %u.\n", arg_seed );
+        
+        srand( (unsigned) arg_seed );
+    }
+    else
+    {
+        rseed = (unsigned) time( &t );
+        write_log( "\n@r--- @wNo seed provided, using random seed %u.\n", rseed );
+        
+        srand( rseed );
+    }
+
     // Allocate heap for static randoms
     staticRandoms = malloc( sizeof( int ) * getLargestSortSize() );
        
@@ -75,6 +94,50 @@ int main()
     write_log("\nSorting Complete.\n\n");
     
     return( 0 );
+}
+
+void parseArgs( int argc, char *argv[] )
+{
+    int opt;
+    char *endptr;
+    
+    while( ( opt = getopt(argc, argv, "s:vh" ) ) != -1 ) 
+    {
+        switch( opt ) 
+        {
+            case 's':
+                errno = 0;
+                unsigned long val = strtoul( optarg, &endptr, 10 );
+                
+                // check for conversion errors
+                if( errno == ERANGE || val > UINT_MAX )
+                {
+                    write_log( "@r--- @wSeed value needs to be between 0 and %u.\n", UINT_MAX );
+                    exit( 0 );
+                }
+                
+                if( *endptr != '\0' )
+                {
+                    write_log( "@r--- @wInvalid characters in number.\n" );
+                    exit( 0 );
+                }
+                
+                arg_seed = (uint) val;
+                seed_provided = TRUE;
+                break;
+                
+            case 'v':
+                write_log( "@r--- @wsort-test version 1.0.\n" );
+                exit( 0 );
+                break;
+                
+            case 'h':
+                
+            default:
+                write_log( "@r--- @wUsage: %s [-s seed] [-v]\n", argv[0]);
+                exit( 0 );
+        }
+    }
 }
 
 uint32_t getLargestSortSize()

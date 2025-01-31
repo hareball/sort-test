@@ -34,6 +34,9 @@
 #include <assert.h>
 #include <math.h>
 #include <time.h>
+#include <errno.h>
+#include <limits.h>
+#include <unistd.h>
 
 #define TRUE                1
 #define FALSE               (!TRUE) 
@@ -125,7 +128,7 @@ struct stats_def
 {
     SORT *sortUsed;
     ALGORITHM *algoUsed;
-    allocMemFun memAlloc;       // these mem routines don't need to be in the stats_def... need to consider taking them out
+    allocMemFun memAlloc;      // these mem routines don't need to be in the stats_def... need to consider taking them out
     freeMemFun memFree;
     addStackMemFun addStackMem;
     uint64_t memoryUsed;       // Bytes
